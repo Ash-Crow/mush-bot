@@ -1,0 +1,17 @@
+== Finnmarkslopet folder structure and file analysis ==
+
+(root)
+ │
+ ├─► (Races subfolders, one per race edition // name: "<YEAR> (FL500|FL1000|FL Junior)) " )
+ │ │
+ │ ├─► "mushers"
+ │ │ │
+ │ │ ├─► (Mushers checkpoint files, one per musher // name: "<YEAR> (FL500 - Limited class|FL1000 - Open class|FL Junior) <FULL_NAME> checkpoints.csv" )
+ │ │ └─► (Mushers detail files, one per musher // name: "<YEAR> (FL500 - Limited class|FL1000 - Open class|FL Junior) <FULL_NAME> details.csv" )
+ │ ├─► (Race entrants file // name: "<YEAR> (FL500 - Limited class|FL1000 - Open class|FL Junior) entrants.csv" )
+ │ ├─► (Race last update file // name: "<YEAR> (FL500 - Limited class|FL1000 - Open class|FL Junior) last update.csv" )
+ │ ├─► (Race results file // name: "<YEAR> (FL500 - Limited class|FL1000 - Open class|FL Junior) results.csv" )
+ │ └─► (Race trails file // name: "<YEAR> (FL500 - Limited class|FL1000 - Open class|FL Junior) trails.csv" )
+ ├─► (Race edition <=> qID match table : "_Finnmarkslopet Qid.csv")
+ └─► (Race all time winners list: "summary.csv")
+
