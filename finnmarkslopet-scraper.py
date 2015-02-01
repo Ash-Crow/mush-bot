@@ -1,8 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
 """
-Create a CSV with each race since 1990, with the officialsite_id and the Wikidata qid.
+Create a CSV with each race since 1990, with the rid and the Wikidata qid.
 """
 
 import os
@@ -31,9 +31,8 @@ soup = BeautifulSoup(response.text)
 table = soup.select('.winners tr')
 table.pop(0)
 
-
 with open(root_dir + 'finnmarkslopet-qid.csv', 'w') as csv_out:
-	fieldnames = ["race", "officialsite_id", "qid"]
+	fieldnames = ["race", "rid", "qid"]
 	writer = csv.DictWriter(csv_out, fieldnames=fieldnames)
 	writer.writeheader()
 
@@ -43,21 +42,21 @@ with open(root_dir + 'finnmarkslopet-qid.csv', 'w') as csv_out:
 
 		writer.writerow({
 			'race': year + ' FL1000',
-			'officialsite_id': re.search("openRaceWnd\('(?P<id>[0-9]*)'\)", links[0].get('href')).group("id"),
+			'rid': re.search("openRaceWnd\('(?P<id>[0-9]*)'\)", links[0].get('href')).group("id"),
 			'qid':race_qids[year + " FL1000"]
 		});
 
 		if len(links) > 1:
 			writer.writerow({
-				'race': year + 'FL500',
-				'officialsite_id': re.search("openRaceWnd\('(?P<id>[0-9]*)'\)", links[1].get('href')).group("id"),
+				'race': year + ' FL500',
+				'rid': re.search("openRaceWnd\('(?P<id>[0-9]*)'\)", links[1].get('href')).group("id"),
 				'qid':race_qids[year + " FL500"]
 			});
 
 		if len(links) == 3:
 			writer.writerow({
 				'race': year + ' FL Junior',
-				'officialsite_id': re.search("openRaceWnd\('(?P<id>[0-9]*)'\)", links[2].get('href')).group("id"),
+				'rid': re.search("openRaceWnd\('(?P<id>[0-9]*)'\)", links[2].get('href')).group("id"),
 				'qid':race_qids[year + " FL Junior"]
 			});
 

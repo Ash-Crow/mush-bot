@@ -12,6 +12,7 @@
  │ ├─► (Race last update file // name: "<YEAR> (FL500 - Limited class|FL1000 - Open class|FL Junior) last update.csv" )
  │ ├─► (Race results file // name: "<YEAR> (FL500 - Limited class|FL1000 - Open class|FL Junior) results.csv" )
  │ └─► (Race trails file // name: "<YEAR> (FL500 - Limited class|FL1000 - Open class|FL Junior) trails.csv" )
- ├─► (Race edition <=> qID match table : "_Finnmarkslopet Qid.csv")
+ ├─► (Race edition <=> official site race id <=> qID match table : "finnmarkslopet-qid.csv")
+ ├─► (Musher names <=> qID match table : "mushers-qid.csv")
  └─► (Race all time winners list: "summary.csv")
 
