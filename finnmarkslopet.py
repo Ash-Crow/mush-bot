@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
-import os 			# Files and folder manipulations
-import re 			# Regular expressions
-import csv 			# CSV file manipulations 
-import pywikibot	# Wikidata interactions
+import os 				# Files and folder manipulations
+import re 				# Regular expressions
+import csv 				# CSV file manipulations 
+from wditem import *	# Class for Wikidata items
 
-class Race(object):
+site = pywikibot.Site("wikidata", "wikidata")
+repo = site.data_repository()
+
+class Race(WDitem):
 	"""An edition of the Finnmarkslopet."""
 
 	# Faire un CSV par course
 	#colonnes : numéro de dossard, nom du musher, classement final, lieu d'abandon le cas échéant, source
-	
+
 	mushers = {}
 	
 	def __init__(self,folder_name):
@@ -31,18 +34,47 @@ class Race(object):
 		self.qid = race_qids[self.folder_name]['qid'] # Qid on Wikidata
 		self.rid = race_qids[self.folder_name]['rid'] # race id on the official site
 
+		self.wd_item = pywikibot.ItemPage(repo, self.qid)
+		self.wd_item.get()
+
+
 	def list_mushers(self):
-		"""Lists the mushers who have entered a race and puts them in a dictionary with their """
+		"""Lists the mushers who have entered a race and puts them in a dictionary with their competition number as key,
+		then gets their final status"""
+
+		"""First, the entrants file, with all the entrants and most of the info"""
 		with open(root_dir + self.folder_name + "/" + self.fullracename + " entrants.csv", 'r') as csv_race_entrants:
 			reader = csv.DictReader(csv_race_entrants)
 
 			for row in reader:
 				this_musher = Musher(row['Name'], row['Country'], row['Hometown'])
-				self.mushers.update({ int(re.match(r'\d+', row['Nr']).group()): this_musher})
-
+				self.mushers.update({ int(re.match(r'\d+', row['Nr']).group()): this_musher}) #competition number ends with .
 		csv_race_entrants.closed
 
-class Musher(object):
+		"""Now the results file, with the final rank for those who finished the race. This file is in Norwegian, yay."""
+		with open(root_dir + self.folder_name + "/" + self.fullracename + " results.csv", 'r') as csv_race_results:
+			reader = csv.DictReader(csv_race_results)
+
+			for row in reader:
+				self.mushers[int(row['Bib'])].final_rank = row['Rank']
+				
+		csv_race_results.closed
+
+		"""Finally, we want to know the place where the musher scratched"""
+		for i in self.mushers:
+
+			if not hasattr(self.mushers[i],'final_rank'):
+				print(self.mushers[i].name)
+				with open(root_dir + self.folder_name + "/mushers/" + self.fullracename + " " + self.mushers[i].name + " details.csv", 'r') as musher_details:
+					reader = csv.DictReader(musher_details)
+
+					for row in reader:
+						if row['Time out'] != '':
+							checkpoint = row['Checkpoint']
+				
+				musher_details.closed
+
+class Musher(WDitem):
 	"""A musher participating in an edition of the Finnmarkslopet"""
 	def __init__(self,name, country, hometown):
 		self.name = name
@@ -58,6 +90,8 @@ class Musher(object):
 
 def initial_checks():
 	"""Perform a series of checks to be sure the race data is good."""
+
+	#TODO check if user-config.py is present
 	print("{} race editions found.".format(len(race_editions)))
 
 	filecount_errors = 0
@@ -80,14 +114,12 @@ def import_ids():
 		reader = csv.DictReader(csv_race_ids)
 		for row in reader:
 			race_qids[row['race']] = { 'rid': row['rid'], 'qid': row['qid'] }
-
 	csv_race_ids.closed
 
-	with open (root_dir + 'mushers-qid.csv', 'r') as csv_musher_ids:
+	with open(root_dir + 'mushers-qid.csv', 'r') as csv_musher_ids:
 		reader = csv.DictReader(csv_musher_ids)
 		for row in reader:
 			musher_qids.update({row['label']: row['qid'] })
-
 	csv_musher_ids.closed
 
 def list_new_mushers():
@@ -109,23 +141,27 @@ old_mushers = {}
 #initial_checks()
 import_ids()
 
+#"""
 #**TEST** 
-"""
 test_ride = Race("1990 FL500")
+print(test_ride.qid)
 
 test_ride.list_mushers()
 
-print(test_ride.mushers)
-print(test_ride.mushers[17].name)
 
+#test_ride.wd_item.editLabels(labels={'br': 'Finnmarksløpet 1990, FL500'}, summary=u'Edit label')
+# end test block.
 #"""
 
+"""
 for race in race_editions:
 	this_race = Race(os.path.basename(race))
 	this_race.list_mushers()
+	this_race.check_latin_labels()
 
 new_mushers.sort()
 list_new_mushers()
+#"""
 
 #print old_mushers
 #print len(old_mushers)

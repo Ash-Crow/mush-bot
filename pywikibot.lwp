@@ -1,0 +1,7 @@
+#LWP-Cookies-2.0
+Set-Cookie3: centralauth_Token=415dc9b98bba3c511f760ccb4307aa3f; path="/"; domain=".wikidata.org"; path_spec; domain_dot; secure; expires="2015-03-04 21:29:56Z"; httponly=None; version=0
+Set-Cookie3: centralauth_User="Mush+bot"; path="/"; domain=".wikidata.org"; path_spec; domain_dot; secure; expires="2015-03-04 21:29:56Z"; httponly=None; version=0
+Set-Cookie3: forceHTTPS=1; path="/"; domain=".wikidata.org"; path_spec; domain_dot; expires="2015-03-04 21:29:56Z"; httponly=None; version=0
+Set-Cookie3: forceHTTPS=true; path="/"; domain="www.wikidata.org"; path_spec; expires="2015-03-04 21:29:56Z"; httponly=None; version=0
+Set-Cookie3: wikidatawikiUserID=1655687; path="/"; domain="www.wikidata.org"; path_spec; secure; expires="2015-03-04 21:29:56Z"; httponly=None; version=0
+Set-Cookie3: wikidatawikiUserName="Mush+bot"; path="/"; domain="www.wikidata.org"; path_spec; secure; expires="2015-03-04 21:29:56Z"; httponly=None; version=0
